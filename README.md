@@ -1,2 +1,4 @@
 # Linear_Regression
-Simple example on how to make a linear regression
+An Example on how to make a simple linear regression with Seaborn Regplot, based on Hubble dataset.
+
+
