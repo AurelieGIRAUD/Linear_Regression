@@ -1,0 +1,48 @@
+from pathlib import Path
+import pandas as pd
+import pandas_profiling 
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+import statsmodels.api as sm
+import statsmodels.formula.api as smf
+from scipy.stats import linregress
+
+# Load the data from a path
+df = pd.read_csv(Path.cwd()/'mydataset.csv')
+
+# Linear Model creation
+reg_simp = smf.ols('variable to explain ~ variable explicative', data=dataset).fit()
+
+# Get Results
+print(reg_simp.summary())
+
+# Plot Results
+ax = sns.lmplot(x="col explicative", y="col to explain", data=dataset, ci=None, line_kws={'color':'black'})
+ax.set(xlabel='col explicative', ylabel='col to explain')
+plt.show()
+
+# Plot Predicted values VS Real values
+dataset['col to explain_ajust_s'] = reg_simp.predict()
+
+X_plot = [dataset['col to explain'].min(), dataset['col to explain'].max()]
+
+ax = sns.scatterplot(x="col to explain", y="col to explain_ajust_s", data=ozone)
+ax.set(xlabel='col to explain', ylabel='col to explain ajusted')
+plt.plot(X_plot, X_plot, color='r')
+plt.show()
+
+# Get Residuals
+dataset['residual_s'] = reg_simp.resid
+
+# Plot Residuals
+plt.hist(dataset['residual_s'], density=True)
+plt.xlabel('Residuals')
+plt.title('Histogramme of residuals')
+plt.show()
+
+# Predict
+input_ = pd.DataFrame({'col explicative':[input_value]})
+prediction= reg_simp.predict(input_)
+
+print(round(prediction[0], 2))
